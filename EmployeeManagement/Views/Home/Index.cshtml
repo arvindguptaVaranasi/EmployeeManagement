@@ -4,7 +4,15 @@
     ViewBag.Title = "Employee Details";
 
 }
+<style type="text/css">
+    .m-3 {
+        margin: 0px !important;
+    }
 
+    .card-deck .card {
+      
+    }
+</style>
 @*<table>
         <thead>
             <tr>
@@ -45,7 +53,7 @@
             <div class="card-footer text-center">
                 <a asp-controller="home" asp-action="details" asp-route-id="@employee.Id"
                    class="btn btn-primary m-1">View</a>
-                <a href="#" class="btn btn-primary m-1">Edit</a>
+                <a asp-controller="Home" asp-action="Edit" asp-route-id="@employee.Id" class="btn btn-primary m-1">Edit</a>
                 <a href="#" class="btn btn-danger m-1">Delete</a>
             </div>
         </div>

@@ -36,8 +36,13 @@ namespace EmployeeManagement
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            { app.UseStatusCodePagesWithReExecute("Error/{0}"); }
             app.UseStaticFiles();
-            app.UseMvcWithDefaultRoute();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            });
             string customKeyValue = _config["MyKey"];
             //app.Run(async (context) =>
             //{
