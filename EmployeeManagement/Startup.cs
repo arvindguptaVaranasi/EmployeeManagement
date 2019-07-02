@@ -37,8 +37,12 @@ namespace EmployeeManagement
                 app.UseDeveloperExceptionPage();
             }
             else
-            { app.UseStatusCodePagesWithReExecute("Error/{0}"); }
+            {
+                //app.UseStatusCodePagesWithReExecute("Error/{0}");
+                app.UseExceptionHandler("/GlobalError");
+            }
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");

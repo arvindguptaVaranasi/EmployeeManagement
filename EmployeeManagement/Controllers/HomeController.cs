@@ -34,22 +34,23 @@ namespace EmployeeManagement.Controllers
         }
         public ViewResult Details(int id)
         {
-            Employee model = _employeeRepository.GetEmployee(id);
-            ViewBag.PageTitle = "Employee Details";
+            throw new Exception("Error in Details View");
+            //Employee model = _employeeRepository.GetEmployee(id);
+            //ViewBag.PageTitle = "Employee Details";
 
-            // Instantiate HomeDetailsViewModel and store Employee details and PageTitle
-            HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel()
-            {
-                Employee = _employeeRepository.GetEmployee(id),               
-                PageTitle = "Employee Details"
-            };
-            if (homeDetailsViewModel.Employee == null)
-            {
-                Response.StatusCode = 404;
-                return View("EmployeeNotFound", id);
+            //// Instantiate HomeDetailsViewModel and store Employee details and PageTitle
+            //HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel()
+            //{
+            //    Employee = _employeeRepository.GetEmployee(id),               
+            //    PageTitle = "Employee Details"
+            //};
+            //if (homeDetailsViewModel.Employee == null)
+            //{
+            //    Response.StatusCode = 404;
+            //    return View("EmployeeNotFound", id);
 
-            }
-            return View(homeDetailsViewModel);
+            //}
+            //return View(homeDetailsViewModel);
         }
         [HttpPost]
         public IActionResult Create(CreateViewModel model)
