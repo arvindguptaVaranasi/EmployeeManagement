@@ -10,6 +10,7 @@ using BLServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using EmployeeManagement.EF;
+using Microsoft.AspNetCore.Identity;
 
 namespace EmployeeManagement
 {
@@ -27,6 +28,7 @@ namespace EmployeeManagement
             services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(_config.GetConnectionString("EmployeeDBConnection")));
             services.AddMvc();
             services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
