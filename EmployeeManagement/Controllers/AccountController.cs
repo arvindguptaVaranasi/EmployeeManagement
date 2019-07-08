@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using EmployeeManagement.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EmployeeManagement.Controllers
 {
@@ -53,25 +54,59 @@ namespace EmployeeManagement.Controllers
             }
             return View(rsModel);
         }
+        [AllowAnonymous]
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string ReturnUrl)
         {
+            ViewData["ReturnUrl"] = ReturnUrl;
             return View();
-        }
-
-        public async Task<IActionResult> Login(LoginViewModel model)
+        }       
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginViewModel model,string ReturnUrl)
         {
             if(ModelState.IsValid)
             {
                 var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    if (!string.IsNullOrEmpty(ReturnUrl))
+                    {
+                        if (Url.IsLocalUrl(ReturnUrl))
+                        {
+                            return Redirect(ReturnUrl);
+                        }
+                        else
+                        {
+                            return RedirectToAction("index", "home");
+                        }                       
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
                 ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
             }
             return View();
         }
+
+        [AcceptVerbs("Get", "Post")]
+        [AllowAnonymous]
+        public async Task<IActionResult> IsEmailInUse(string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json($"Email {email} is already in use.");
+            }
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Logout()
