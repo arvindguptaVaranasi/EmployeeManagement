@@ -11,32 +11,34 @@ namespace EmployeeManagement.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<IdentityUser> userManager;
-        private readonly SignInManager<IdentityUser> signInManager;
-        public AccountController(UserManager<IdentityUser> _userManager, SignInManager<IdentityUser> _signInManager)
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
+        public AccountController(UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager)
         {
             this.userManager = _userManager;
             this.signInManager = _signInManager;
-        }        
+        }
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
-
+        [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel rsModel)
         {
             if (ModelState.IsValid)
             {
                 // Copy data from RegisterViewModel to IdentityUser
-                var user = new IdentityUser()
+                var user = new ApplicationUser()
                 {
                     UserName = rsModel.Email,
-                    Email = rsModel.Email
+                    Email = rsModel.Email,
+                    City = rsModel.City
                 };
 
                 // Store user data in AspNetUsers database table
-                var result = await userManager.CreateAsync(user,rsModel.Password);
+                var result = await userManager.CreateAsync(user, rsModel.Password);
 
                 // If user is successfully created, sign-in the user using
                 // SignInManager and redirect to index action of HomeController
@@ -60,12 +62,12 @@ namespace EmployeeManagement.Controllers
         {
             ViewData["ReturnUrl"] = ReturnUrl;
             return View();
-        }       
+        }
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginViewModel model,string ReturnUrl)
+        public async Task<IActionResult> Login(LoginViewModel model, string ReturnUrl)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
@@ -79,7 +81,7 @@ namespace EmployeeManagement.Controllers
                         else
                         {
                             return RedirectToAction("index", "home");
-                        }                       
+                        }
                     }
                     else
                     {

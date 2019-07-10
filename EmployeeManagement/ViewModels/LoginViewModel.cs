@@ -11,7 +11,7 @@ namespace EmployeeManagement.ViewModels
     {
         [Required]
         [EmailAddress]
-        [Remote("IsEmailInUse", "Account")]
+       // [Remote("IsEmailInUse", "Account")]
         public string Email { get; set; }
 
         [Required]
